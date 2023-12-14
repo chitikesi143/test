@@ -1,0 +1,29 @@
+name: Deploy to EC2
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Environment to deploy to'
+        required: true
+        default: 'production'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Install SSH Key
+        run: |
+          echo "$SSH_PRIVATE_KEY" > deploy_key.pem
+          chmod 600 deploy_key.pem
+
+      - name: Deploy to EC2
+        run: |
+          scp -i deploy_key.pem -o StrictHostKeyChecking=no -P 109 -r ./test ubuntu@stage2.aqucloud.com:/home/ubuntu/deployment
+          ssh -i deploy_key.pem -o StrictHostKeyChecking=no -p 109 ubuntu@stage2.aqucloud.com 'cd /home/ubuntu/deployment && npm install && npm start'
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
