@@ -23,7 +23,7 @@ jobs:
 
       - name: Deploy to EC2
         run: |
-          scp -i deploy_key.pem -o StrictHostKeyChecking=no -P 109 -r ./test ubuntu@stage2.aqucloud.com:/home/ubuntu/deployment
+          scp -i deploy_key.pem -o StrictHostKeyChecking=no -P 109 -r ~/test ubuntu@stage2.aqucloud.com:/home/ubuntu/deployment
           ssh -i deploy_key.pem -o StrictHostKeyChecking=no -p 109 ubuntu@stage2.aqucloud.com 'cd /home/ubuntu/deployment && npm install && npm start'
         env:
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
