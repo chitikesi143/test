@@ -17,7 +17,7 @@ jobs:
 
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Install SSH Key
         run: |
@@ -28,8 +28,8 @@ jobs:
 
       - name: Deploy to EC2
         run: |
-          scp -i $SSH_KEY_PATH -o StrictHostKeyChecking=no -P 109 -r ./your-node-app ubuntu@your-ec2-ip:/path/to/deployment
-          ssh -i $SSH_KEY_PATH -o StrictHostKeyChecking=no -p 109 ubuntu@your-ec2-ip 'cd /path/to/deployment && touch abc' 
+          scp -i $SSH_KEY_PATH -o StrictHostKeyChecking=no -P 109 -r ~/test ubuntu@stage2.aqucloud.com:/home/ubuntu/deployment
+          ssh -i $SSH_KEY_PATH -o StrictHostKeyChecking=no -p 109 ubuntu@stage2.aqucloud.com 'cd /path/to/deployment && touch abc' 
 	env:
  	SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
   	SSH_KNOWN_HOSTS: ${{ secrets.SSH_KNOWN_HOSTS }}
