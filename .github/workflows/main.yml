@@ -1,4 +1,5 @@
 name: Deploy to EC2
+
 on:
   workflow_dispatch:
     inputs:
@@ -10,20 +11,25 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+
+    env:
+      SSH_KEY_PATH: ${{ github.workspace }}/private.key
+
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v2
+
       - name: Install SSH Key
         run: |
           mkdir -p ~/.ssh/
-          echo "$SSH_PRIVATE_KEY" > ../private.key
-          sudo chmod 600 ../private.key
-          echo "$SSH_KNOWN_HOSTS" > ~/.ssh/known_hosts	
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > $SSH_KEY_PATH
+          sudo chmod 600 $SSH_KEY_PATH
+          echo "${{ secrets.SSH_KNOWN_HOSTS }}" > ~/.ssh/known_hosts
+
       - name: Deploy to EC2
         run: |
           scp -i $SSH_KEY_PATH -o StrictHostKeyChecking=no -P 109 -r ./your-node-app ubuntu@your-ec2-ip:/path/to/deployment
-          ssh -i $SSH_KEY_PATH -o StrictHostKeyChecking=no -p 109 ubuntu@your-ec2-ip 'cd /path/to/deployment && touch abc'
+          ssh -i $SSH_KEY_PATH -o StrictHostKeyChecking=no -p 109 ubuntu@your-ec2-ip 'cd /path/to/deployment && touch abc' 
 	env:
-          SSH_PRIVATE_KEY: ${{secrets.SSH_PRIVATE_KEY}}
-          SSH_KNOWN_HOSTS: ${{secrets.SSH_KNOWN_HOSTS}}
-          SSH_KEY_PATH: ${{ github.workspace }}/../private.key
+ 	SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+  	SSH_KNOWN_HOSTS: ${{ secrets.SSH_KNOWN_HOSTS }}
