@@ -16,10 +16,10 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Install SSH Key
-        run: |
-          echo "$SSH_PRIVATE_KEY" > deploy_key.pem
-          chmod 600 deploy_key.pem
+      - name: Configure SSH Key
+        uses: webfactory/ssh-agent@v0.5.2
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
       - name: Deploy to EC2
         run: |
