@@ -28,8 +28,8 @@ jobs:
       
         run: |
           echo "$PRIVATE_KEY" > private_key && chmod 600 private_key
-          scp -o StrictHostKeyChecking=no -i private_key -P 108 -r ./*  ubuntu@43.205.243.195:/home/ubuntu/deployment
-          ssh -o StrictHostKeyChecking=no -i private_key -p 108 ubuntu@43.205.243.195 '
+          scp -o StrictHostKeyChecking=no -i private_key -P 109 -r ./*  ubuntu@stage2.aqucloud.com:/home/ubuntu/deployment
+          ssh -o StrictHostKeyChecking=no -i private_key -p 109 ubuntu@stage2.aqucloud.com '
             # Now we have got the access of EC2 and we will start the deploy.
             cd /home/ubuntu/deployment &&
             touch "$(date '+%Y-%m-%d_%H-%M-%S')" &&
