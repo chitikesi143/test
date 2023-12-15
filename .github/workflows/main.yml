@@ -27,6 +27,6 @@ jobs:
               cd /home/ubuntu/deployment &&
               touch "$(date '+%Y-%m-%d_%H-%M-%S')"
           - name: Clean up private key
-            run: rm private_key
+            rm private_key
               '
 
