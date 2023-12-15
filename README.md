@@ -1,2 +1,1 @@
-Hello 
-I have updated this file
+Changed the hostname as stage2.aqucloud.com
