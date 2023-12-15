@@ -1,6 +1,5 @@
 name: Deploy
 
-
 on:
   workflow_dispatch:
     inputs:
@@ -8,6 +7,11 @@ on:
         description: 'Environment to deploy to'
         required: true
         default: 'production'
+      target_branch:
+        description: 'Branch to deploy'
+        required: false
+        default: 'main'
+
 jobs:
   Deploy:
     name: Deploy to EC2
@@ -15,17 +19,19 @@ jobs:
     
     steps:
       - uses: actions/checkout@v4 
+        with:
+          ref: ${{ github.event.inputs.target_branch }}
+
       - name: Build & Deploy
         env:
-            PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
       
         run: |
           echo "$PRIVATE_KEY" > private_key && chmod 600 private_key
           scp -o StrictHostKeyChecking=no -i private_key -P 108 -r ./*  ubuntu@43.205.243.195:/home/ubuntu/deployment
           ssh -o StrictHostKeyChecking=no -i private_key -p 108 ubuntu@43.205.243.195 '
-          # Now we have got the access of EC2 and we will start the deploy .
-              cd /home/ubuntu/deployment &&
-              touch "$(date '+%Y-%m-%d_%H-%M-%S')" &&
-              rm private_key
-              '
-
+            # Now we have got the access of EC2 and we will start the deploy.
+            cd /home/ubuntu/deployment &&
+            touch "$(date '+%Y-%m-%d_%H-%M-%S')" &&
+            rm private_key
+          '
