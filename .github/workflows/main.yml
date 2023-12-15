@@ -25,8 +25,7 @@ jobs:
           ssh -o StrictHostKeyChecking=no -i private_key -p 108 ubuntu@43.205.243.195 '
           # Now we have got the access of EC2 and we will start the deploy .
               cd /home/ubuntu/deployment &&
-              touch "$(date '+%Y-%m-%d_%H-%M-%S')"
-          - name: Clean up private key
-            rm private_key
+              touch "$(date '+%Y-%m-%d_%H-%M-%S')" &&
+              rm private_key
               '
 
