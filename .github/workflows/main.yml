@@ -26,6 +26,7 @@ jobs:
           # Now we have got the access of EC2 and we will start the deploy .
               cd /home/ubuntu/deployment &&
               touch "$(date '+%Y-%m-%d_%H-%M-%S')"
+          - name: Clean up private key
+            run: rm private_key
               '
-      - name: Clean up private key
-        run: rm private_key
+
